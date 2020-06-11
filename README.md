@@ -98,3 +98,7 @@ Complete the remaining `CRUD` processes such as update and delete of products an
 ### Iteration 10 | Configure redux dev tool
 
 Configure `redux-devtools` for debugging purposes.
+
+### Iteration 11 | Loaders
+
+Take advantage of the `redux` state and actions to add`loaders` to your application and show the user when a process is taking place, for example an update or a data query.

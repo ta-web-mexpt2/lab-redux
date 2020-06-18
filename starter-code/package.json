@@ -11,6 +11,7 @@
     "react-scripts": "3.4.1"
   },
   "scripts": {
+    "server": "json-server --watch db.json --port 4000",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

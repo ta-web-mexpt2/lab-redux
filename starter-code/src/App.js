@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
+import ProductForm from "./components/ProductForm";
 import ProductList from "./components/ProductList";
 import CartList from "./components/CartList";
 import { getProducts } from "./services/products";
@@ -20,8 +21,13 @@ function App() {
 
   return (
     <div className="App">
-      <ProductList products={products} />
-      <CartList carts={carts} />
+      <section>
+        <ProductForm />
+        <ProductList products={products} />
+      </section>
+      <section>
+        <CartList carts={carts} />
+      </section>
     </div>
   );
 }

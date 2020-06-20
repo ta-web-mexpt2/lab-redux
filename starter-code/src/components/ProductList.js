@@ -1,13 +1,22 @@
 import React from "react";
-import { checkIfEmptyOject } from "../utils";
+import { useSelector } from "react-redux";
+import { checkIfEmptyOject, denormalizeProductsData } from "../utils";
 
-const ProductList = (props) => {
-    console.log(props);
-    const emptyProducts = checkIfEmptyOject(props.products);
+const ProductList = () => {
+
+    const { products, productsLoading, productsError } = useSelector((state) => state);
+    const emptyProducts = checkIfEmptyOject(products);
     return(
         <div>
             <ul>
-                { props.products && !emptyProducts && props.products.map(product => (
+                { productsLoading && (
+                    <h2>Loading Products ...</h2>
+                )}
+                { productsError && (
+                    <h3>{productsError}</h3>
+                ) }
+                {/* Se tiene que convertir el objeto products a un array, para poder hacer el map: */}
+                { products && !emptyProducts && denormalizeProductsData(products).map(product => (
                 <li key={product.id} >
                     {product.description} - ${product.price}
                 </li>

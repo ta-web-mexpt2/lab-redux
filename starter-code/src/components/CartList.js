@@ -1,14 +1,18 @@
 import React from "react";
-import { checkIfEmptyOject } from "../utils";
+import { useSelector } from "react-redux";
+import { checkIfEmptyOject, denormalizeCartsData } from "../utils";
 
-const CartList = (props) => {
-  console.log(props);
-  const emptyCarts = checkIfEmptyOject(props.carts);
+const CartList = () => {
+
+  const { carts, cartsLoading, cartsError } = useSelector(state => (state));
+  const emptyCarts = checkIfEmptyOject(carts);
   return (
     <div>
-      {props.carts &&
+      { cartsLoading && <h2>Loading Carts...</h2>}
+      { cartsError && <h3>{cartsError}</h3> }
+      {carts &&
         !emptyCarts &&
-        props.carts.map((cart) => (
+        denormalizeCartsData(carts).map((cart) => (
           <li key={cart.id}>
             Items: {cart.items.length} - ${cart.total}
             {cart.items && cart.items.map((item) =>

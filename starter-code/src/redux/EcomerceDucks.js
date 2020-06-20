@@ -9,7 +9,7 @@ import {
   removeItem,
 } from "../services/carts";
 import { normalizeProductsData, denormalizeProductsData, normalizeCartsData, denormalizeCartsData } from "../utils";
-import { act } from "react-dom/test-utils";
+import {  } from "react-dom/test-utils";
 
 // Actions
 const LOADING_PRODUCTS = "lab-redux/products/LOADING_PRODUCTS";
@@ -18,6 +18,7 @@ const CREATE_PRODUCT_SUCESS = "lab-redux/products/CREATE_PRODUCT_SUCCESS";
 const PRODUCTS_ERROR = "lab-redux/products/PRODUCTS_ERROR";
 
 const LOADING_CARTS = "lab-redux/carts/LOADING_CARTS";
+const GET_CARTS_SUCCESS = "lab-redux/carts/GET_CARTS_SUCCESS";
 const CREATE_CART_SUCCESS = "lab-redux/carts/CREATE_CART_SUCCESS";
 const UPDATE_CART_SUCCESS = "lab-redux/carts/UPDATE_CART_SUCCESS";
 const ADD_ITEM_SUCCESS = "lap-redux/carts/ADD_ITEM_SUCCESS";
@@ -45,13 +46,16 @@ export default function reducer(state = initState, action) {
       return { ...state, products: normalizeProductsData(action.payload), productsLoading: false, productsError: undefined };
 
     case CREATE_PRODUCT_SUCESS:
-      return { ...state, products: [...state.products, action.payload], productsLoading: false, productsError: undefined };
+      return { ...state, products: { ...state.products, [action.payload.id]: action.payload }, productsLoading: false, productsError: undefined };
 
     case PRODUCTS_ERROR:
       return { ...state, productsLoading: false, productsError: action.payload };
 
     case LOADING_CARTS:
       return { ...state, cartsLoading: true, cartsError: undefined };
+
+    case GET_CARTS_SUCCESS:
+      return { ...state, carts: normalizeCartsData(action.payload), cartsLoading: false, cartsError: undefined }
 
     case CREATE_CART_SUCCESS:
       return { ...state, carts: [...state.carts, action.payload], cartsLoading: false, cartsError: undefined };
@@ -111,6 +115,11 @@ export const loadingCarts = (payload) => ({
     payload
 });
 
+export const getCartsSuccess = (payload) => ({
+  type: GET_CARTS_SUCCESS,
+  payload
+});
+
 export const createCart = (payload) => ({
     type: CREATE_CART_SUCCESS,
     payload
@@ -137,3 +146,32 @@ export const cartsError = (payload) => ({
 });
 
 // Thunks
+export const loadProducts = () => {
+  return (dispatch) => {
+    dispatch(loadingProducts());
+    getProducts().then(response => {
+      dispatch(getProductsSuccess(response.data));
+    }).catch(error => {
+      dispatch(productsError(error.toString()));
+    } );
+  }
+};
+
+export const loadCarts = () => {
+  return (dispatch) => {
+    dispatch(loadingCarts());
+    getCarts().then(response => {
+      dispatch(getCartsSuccess(response.data));
+    }).catch(error => dispatch(cartsError(error.toString())));
+  }
+};
+
+export const createProduct = (product) => {
+  return (dispatch) => {
+    postProduct(product).then(response => {
+      const payload = response.data;
+      console.log(response.data);
+      dispatch(createProductSuccess(payload));
+    }).catch(error => dispatch(productsError(error.toString())));
+  }
+}

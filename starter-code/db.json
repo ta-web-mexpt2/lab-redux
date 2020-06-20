@@ -19,6 +19,31 @@
       "description": "A nice product",
       "price": 15,
       "id": 4
+    },
+    {
+      "description": "Created",
+      "price": "23",
+      "id": 5
+    },
+    {
+      "description": "Created 2",
+      "price": "353",
+      "id": 6
+    },
+    {
+      "description": "Created 3",
+      "price": "300",
+      "id": 7
+    },
+    {
+      "description": "Created 3",
+      "price": "300",
+      "id": 8
+    },
+    {
+      "description": "Created 3",
+      "price": "300",
+      "id": 9
     }
   ],
   "carts": [

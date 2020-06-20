@@ -1,32 +1,29 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import "./App.css";
+import { loadProducts, loadCarts } from "./redux/EcomerceDucks";
 import ProductForm from "./components/ProductForm";
 import ProductList from "./components/ProductList";
 import CartList from "./components/CartList";
-import { getProducts } from "./services/products";
-import { getCarts } from "./services/carts";
+
 
 function App() {
-  const [products, setProducts] = useState({});
-  const [carts, setCarts] = useState({});
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getProducts().then((res) => {
-      setProducts(res.data);
-    });
-    getCarts().then((res) => {
-      setCarts(res.data);
-    });
-  }, []);
+    dispatch(loadProducts());
+    dispatch(loadCarts());
+  }, [dispatch]);
 
   return (
     <div className="App">
       <section>
         <ProductForm />
-        <ProductList products={products} />
+        <ProductList />
       </section>
       <section>
-        <CartList carts={carts} />
+        <CartList />
       </section>
     </div>
   );

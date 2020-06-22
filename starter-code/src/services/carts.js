@@ -2,12 +2,17 @@ import axios from "axios";
 
 // Get all Carts
 export const getCarts = () => {
-    return axios.get("http://localhost:4000/carts?_embed=items");
+    return axios.get("http://localhost:4000/carts");
 };
 
-// Get all items from a Card
+// Get a Card with items
 export const getCart = (cartId) => {
-    return axios.get(`http://localhost:4000/carts/${cartId}?_embed=items`);
+    return axios.get(`http://localhost:4000/carts/${cartId}`);
+};
+
+// Get a Card with items
+export const getCartItems = (cartId) => {
+    return axios.get(`http://localhost:4000/carts/${cartId}/items`);
 };
 
 // Post New Cart

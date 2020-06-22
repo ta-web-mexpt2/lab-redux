@@ -6,6 +6,8 @@ const CartList = () => {
 
   const { carts, cartsLoading, cartsError } = useSelector(state => (state));
   const emptyCarts = checkIfEmptyOject(carts);
+
+  console.log(carts);
   return (
     <div>
       { cartsLoading && <h2>Loading Carts...</h2>}
@@ -14,9 +16,9 @@ const CartList = () => {
         !emptyCarts &&
         denormalizeCartsData(carts).map((cart) => (
           <li key={cart.id}>
-            Items: {cart.items.length} - ${cart.total}
+            Id: {cart.id} - Items: {cart.items ? cart.items.length : 0} - ${cart.total}
             {cart.items && cart.items.map((item) =>
-            <div>
+            <div key={item.id}>
                 <div>Product: {item.productId}</div>
                 <div>Quantity: {item.quantity}</div>
             </div>)}

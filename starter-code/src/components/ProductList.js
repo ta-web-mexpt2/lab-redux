@@ -32,7 +32,7 @@ const ProductList = () => {
                 {/* Se tiene que convertir el objeto products a un array, para poder hacer el map: */}
                 { products && !emptyProducts && denormalizeProductsData(products).map(product => (
                 <li key={product.id} >
-                    {product.description} - ${product.price} <button name={product.id} onClick={returnDeleteOnClickFunction(product.id)}>Delete</button>
+                    Product Id: {product.id} - {product.description} - ${product.price} <button name={product.id} onClick={returnDeleteOnClickFunction(product.id)}>Delete</button>
                 </li>
             ))}
             </ul>

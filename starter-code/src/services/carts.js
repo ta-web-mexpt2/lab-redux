@@ -21,16 +21,16 @@ export const postCart = (cart) => {
 };
 
 // Update Cart
-export const putCard = (cart) => {
+export const putCart = (cart) => {
     return axios.put(`http://localhost:4000/carts/${cart.id}`, cart);
 }
 
 // Add item to Cart
-export const addItem = (cartId, item) => {
-    return axios.post(`http://localhost:4000/carts/${cartId}/items`, item);
+export const addItemRequest = (item) => {
+    return axios.post(`http://localhost:4000/carts/${item.cartId}/items`, item);
 };
 
 // Remove item
-export const removeItem = (itemId) => {
+export const removeItemRequest = (itemId) => {
     return axios.delete(`http://localhost:4000/items/${itemId}`);
 }

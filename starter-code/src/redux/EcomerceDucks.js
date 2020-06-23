@@ -8,9 +8,9 @@ import {
   getCarts,
   getCartItems,
   postCart,
-  putCard,
-  addItem,
-  removeItem,
+  putCart,
+  addItemRequest,
+  removeItemRequest,
 } from "../services/carts";
 import {
   normalizeProductsData,
@@ -289,3 +289,19 @@ export const deleteProduct = (product_id) => {
       });
   };
 };
+
+export const removeItem = (item) => {
+  return (dispatch) => {
+    removeItemRequest(item.id).then(response => {
+      dispatch(removeCartItem(item));
+    }).catch(error => dispatch(cartsError(error.toString())));
+  }
+};
+
+export const addItem = (item) => {
+  return (dispatch) => {
+    addItemRequest(item).then(response => {
+      dispatch(addCartItem(response.data));
+    }).catch(error => dispatch(cartsError(error.toString())));
+  }
+}

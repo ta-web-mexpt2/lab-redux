@@ -8,13 +8,11 @@ import {
   getCarts,
   getCartItems,
   postCart,
-  putCart,
   addItemRequest,
   removeItemRequest,
 } from "../services/carts";
 import {
   normalizeProductsData,
-  denormalizeProductsData,
   normalizeCartsData,
   denormalizeCartsData,
 } from "../utils";
@@ -48,6 +46,24 @@ const initState = {
 
 // Reducer
 export default function reducer(state = initState, action) {
+
+  const updateArrayCartsTotal = (carts) => {
+    return carts.map(cart => {
+      let tot = cart.items.reduce((acc, item) => (acc += parseFloat(item.quantity) * state.products[item.productId].price), 0);
+      // Para el cart, por cada item, agrega el subtotal:
+      const itemsWithST = cart.items.map(item => (
+        {
+          ...item,
+          subtotal: state.products[item.productId].price * item.quantity,
+          product: `${state.products[item.productId].description} - $${state.products[item.productId].price}`
+        }));
+      return {...cart, total: tot, items: itemsWithST};
+  })};
+
+  const updateObjectCartsTotal = (carts) => {
+    return normalizeCartsData(updateArrayCartsTotal(denormalizeCartsData(carts)));
+  }
+
   switch (action.type) {
     case LOADING_PRODUCTS:
       return { ...state, productsLoading: true, productsError: undefined };
@@ -91,15 +107,16 @@ export default function reducer(state = initState, action) {
     case GET_CARTS_SUCCESS:
       return {
         ...state,
-        carts: normalizeCartsData(action.payload),
+        carts: normalizeCartsData(updateArrayCartsTotal(action.payload)),
         cartsLoading: false,
         cartsError: undefined,
       };
 
     case CREATE_CART_SUCCESS:
+      console.log(action.payload);
       return {
         ...state,
-        carts: [...state.carts, action.payload],
+        carts: updateObjectCartsTotal({...state.carts, [action.payload.id]: action.payload}),
         cartsLoading: false,
         cartsError: undefined,
       };
@@ -109,7 +126,7 @@ export default function reducer(state = initState, action) {
       cartsUpdated[action.payload.id] = action.payload;
       return {
         ...state,
-        carts: cartsUpdated,
+        carts: updateObjectCartsTotal(cartsUpdated),
         cartsLoading: false,
         cartsError: undefined,
       };
@@ -122,7 +139,7 @@ export default function reducer(state = initState, action) {
       cartsItemAdded[action.payload.cartId] = cartToAdd;
       return {
         ...state,
-        carts: cartsItemAdded,
+        carts: updateObjectCartsTotal(cartsItemAdded),
         cartsLoading: false,
         cartsError: undefined,
       };
@@ -137,7 +154,7 @@ export default function reducer(state = initState, action) {
       cartsItemRemoved[action.payload.cartId] = cartToRemove;
       return {
         ...state,
-        carts: cartsItemRemoved,
+        carts: updateObjectCartsTotal(cartsItemRemoved),
         cartsLoading: false,
         cartsError: undefined,
       };
@@ -269,9 +286,7 @@ export const createProduct = (product) => {
   return (dispatch) => {
     postProduct(product)
       .then((response) => {
-        const payload = response.data;
-        console.log(response.data);
-        dispatch(createProductSuccess(payload));
+        dispatch(createProductSuccess(response.data));
       })
       .catch((error) => dispatch(productsError(error.toString())));
   };
@@ -284,7 +299,6 @@ export const deleteProduct = (product_id) => {
         dispatch(deleteProductSucess(product_id));
       })
       .catch((error) => {
-        debugger;
         dispatch(productsError(error.toString()));
       });
   };
@@ -304,4 +318,12 @@ export const addItem = (item) => {
       dispatch(addCartItem(response.data));
     }).catch(error => dispatch(cartsError(error.toString())));
   }
-}
+};
+
+export const addCart = () => {
+  return  (dispatch) => {
+    postCart({total: 0}).then(response => {
+      dispatch(createCart(response.data));
+    }).catch(error => dispatch(cartsError(error.toString())));
+  }
+};

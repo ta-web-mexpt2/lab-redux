@@ -3,42 +3,44 @@ import { useSelector, useDispatch } from "react-redux";
 import { checkIfEmptyOject, denormalizeCartsData } from "../utils";
 import { removeItem } from "../redux/EcomerceDucks";
 import NewItemForm from "./NewItemForm";
+import Card from "./Card";
+import ItemCard from "./ItemCard";
+import CardsContainer from "./CardsContainer";
 
 const CartList = () => {
   const dispatch = useDispatch();
   const { carts, cartsLoading, cartsError } = useSelector((state) => state);
   const emptyCarts = checkIfEmptyOject(carts);
 
-  console.log(carts);
   return (
-    <div>
+    <CardsContainer>
       {cartsLoading && <h2>Loading Carts...</h2>}
       {cartsError && <h3>{cartsError}</h3>}
       {carts &&
         !emptyCarts &&
         denormalizeCartsData(carts).map((cart) => (
-          <div>
+          <Card key={cart.id}>
             <br />
-            <br />
-            <li key={cart.id}>
-              Id: {cart.id} - Items: {cart.items ? cart.items.length : 0} - $
-              {cart.total} ....
+            <div>
+              <h3> Id: {cart.id} - Items: {cart.items ? cart.items.length : 0} - $
+              {cart.total}</h3>
               <NewItemForm cartId={cart.id} />
               <br />
               {cart.items &&
                 cart.items.map((item) => (
-                  <div key={item.id}>
-                    <div>Product: {item.productId}</div>
+                  <ItemCard key={item.id}>
+                    <div>Product: {item.product}</div>
                     <div>Quantity: {item.quantity}</div>
+                    <div>Subtotal: ${item.subtotal}</div>
                     <button onClick={() => dispatch(removeItem(item))}>
                       Remove
                     </button>
-                  </div>
+                  </ItemCard>
                 ))}
-            </li>
-          </div>
+            </div>
+          </Card>
         ))}
-    </div>
+    </CardsContainer>
   );
 };
 

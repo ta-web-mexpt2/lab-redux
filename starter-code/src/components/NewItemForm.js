@@ -12,6 +12,7 @@ const NewItemForm = (props) => {
   const products = useSelector((state) => state.products);
 
   const handleChange = async (e) => {
+    //console.log(e.target);
     // Tener en cuenta que setInputs es asyncrono
     setInputs({ ...inputs, [e.target.name]: e.target.value });
     // Y el log regresa un estado antes porque se ejecuta previo a que se termine de actualizar el valor:

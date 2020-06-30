@@ -49,6 +49,7 @@ export default function reducer(state = initState, action) {
 
   const updateArrayCartsTotal = (carts) => {
     return carts.map(cart => {
+      console.log(cart);
       let tot = cart.items.reduce((acc, item) => (acc += parseFloat(item.quantity) * state.products[item.productId].price), 0);
       // Para el cart, por cada item, agrega el subtotal:
       const itemsWithST = cart.items.map(item => (
@@ -113,10 +114,10 @@ export default function reducer(state = initState, action) {
       };
 
     case CREATE_CART_SUCCESS:
-      console.log(action.payload);
+      const newCart = {...action.payload, items: []}
       return {
         ...state,
-        carts: updateObjectCartsTotal({...state.carts, [action.payload.id]: action.payload}),
+        carts: updateObjectCartsTotal({...state.carts, [newCart.id]: newCart}),
         cartsLoading: false,
         cartsError: undefined,
       };

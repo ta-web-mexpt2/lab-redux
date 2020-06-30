@@ -42,6 +42,10 @@
     {
       "total": 0,
       "id": 4
+    },
+    {
+      "total": 0,
+      "id": 5
     }
   ],
   "items": [
@@ -86,6 +90,12 @@
       "productId": "4",
       "quantity": "3",
       "id": 12
+    },
+    {
+      "cartId": "5",
+      "productId": "3",
+      "quantity": "6",
+      "id": 13
     }
   ]
 }

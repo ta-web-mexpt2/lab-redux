@@ -1,25 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { loadProducts, loadCarts } from "./redux/EcomerceDucks";
+import NavBar from "./components/NavBar";
+import Routes from "./Routes";
+import Styled from "styled-components";
+
+const AppWrapper = Styled.div`
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Open Sans", "Ubuntu", "Fira Sans", "Helvetica Neue", sans-serif;
+    font-size: 1.6rem;
+    color: #fff;
+    margin: 0;
+`;
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(loadProducts());
+    dispatch(loadCarts());
+  }, [dispatch]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AppWrapper>
+      <NavBar />
+      <Routes />
+    </AppWrapper>
   );
 }
 
